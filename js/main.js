@@ -3,27 +3,28 @@ var map;
 // Array for all the listing markers
 var markers = [];
 
+var infowindow = null;
+
+var locations = [
+    { title: 'Sabor de Minas', location: { lat: -15.608421, lng: -56.116834 } },
+    { title: 'Restaurante Avenida', location: { lat: -15.60699, lng: -56.120244 } },
+    { title: 'Subway', location: { lat: -15.607504, lng: -56.119679 } },
+];
+
 // Initialize the map
 function initMap() {
-    var orla = { lat: -15.61628, lng: -56.110091 };
     var verdao = { lat: -15.605145, lng: -56.119046 };
     map = new google.maps.Map(document.getElementById('map'), {
         center: verdao,
         zoom: 16
     });
 
-    var locations = [
-        { title: 'Sabor de Minas', location: { lat: -15.608421, lng: -56.116834 } },
-        { title: 'Restaurante Avenida', location: { lat: -15.60699, lng: -56.120244 } },
-        { title: 'Subway', location: { lat: -15.607504, lng: -56.119679 } },
-    ];
-
-    var infowindow = new google.maps.InfoWindow();
+    infowindow = new google.maps.InfoWindow();
 
     for (var i = 0; i < locations.length; i++) {
         var position = locations[i].location;
         var title = locations[i].title;
-        
+
         // Create a marker per location, and put into markers array
         var marker = new google.maps.Marker({
             position: position,
@@ -34,21 +35,21 @@ function initMap() {
         });
 
         markers.push(marker);
-        
+
         // Open an infowindow and animate the marker
         marker.addListener('click', function () {
-            var self = this;
             populateInfoWindow(this, infowindow);
-            this.setAnimation(google.maps.Animation.BOUNCE);
-            setTimeout(function () {
-                self.setAnimation(null);
-            }, 700);
         });
     }
 }
 
 // Populates the infowindow when the marker is clicked
 function populateInfoWindow(marker, infowindow) {
+    marker.setAnimation(google.maps.Animation.BOUNCE);
+    setTimeout(function () {
+        marker.setAnimation(null);
+    }, 700);
+
     // Check to make sure the infowindow is not already opened on this marker.
     if (infowindow.marker != marker) {
         infowindow.marker = marker;
@@ -60,3 +61,16 @@ function populateInfoWindow(marker, infowindow) {
         });
     }
 }
+
+var ViewModel = function (locations, markers) {
+    var self = this;
+    this.locations = locations;
+    self.markers = markers;
+
+    this.updateCurrentLocation = function (location) {
+        populateInfoWindow(self.markers.find(marker => marker.title === location.title), infowindow);
+        // self.markers[location.id].setMap(null);
+    };
+};
+
+ko.applyBindings(new ViewModel(locations, markers));
