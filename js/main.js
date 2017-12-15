@@ -21,6 +21,11 @@ function initMap() {
     ko.applyBindings(new ViewModel(map, places));
 }
 
+// Show error message if map initialization failed
+function initMapError() {
+    $('#message').show();
+}
+
 // Populates the infowindow when the marker is clicked
 function populateInfoWindow(marker, infowindow, map) {
     marker.setAnimation(google.maps.Animation.BOUNCE);
@@ -37,7 +42,7 @@ function populateInfoWindow(marker, infowindow, map) {
 }
 
 // Place model
-function Place(title, location, map, filter) {
+function Place(title, location, map, filter, activePlace) {
     var self = this;
     this.title = title;
     this.marker = new google.maps.Marker({
@@ -46,6 +51,7 @@ function Place(title, location, map, filter) {
         title: title,
         animation: google.maps.Animation.DROP,
     });
+    // show the place if the filter is empty or if the filter matches the title
     this.show = ko.computed(function() {
         if (!filter() || (self.title.toLowerCase().indexOf(filter().toLowerCase()) > -1)) {
             self.marker.setMap(map);
@@ -65,22 +71,26 @@ var ViewModel = function (map, places) {
     // Make sure the marker property is cleared if the infowindow is closed.
     this.infowindow.addListener('closeclick', function () {
         this.marker = null;
+        self.activePlace(null);
     });
 
     this.filter = ko.observable("");
 
+    this.activePlace = ko.observable();
+
     this.places = ko.observableArray([]);
     places.forEach(function(place){
-        self.places.push(new Place(place.title, place.location, self.map, self.filter))
+        self.places.push(new Place(place.title, place.location, self.map, self.filter));
     });
 
     this.places().forEach(function(place){
         place.marker.addListener('click', function (){
-            populateInfoWindow(place.marker, self.infowindow, self.map);
+            self.showInfowindow(place);
         });
     });
 
     this.showInfowindow = function (place) {
+        self.activePlace(place);
         populateInfoWindow(place.marker, self.infowindow, self.map);
     };
 };

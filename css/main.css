@@ -11,3 +11,7 @@ html, body {
 nav {
     margin: 5px;
 }
+
+#message {
+    display: none;
+}
