@@ -42,7 +42,7 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-4 col-sm-offset-4">
-                <div id="message" class="alert alert-danger text-center">
+                <div id="error-message" class="alert alert-danger text-center">
                     Failed to initialize Google Maps
                 </div>
             </div>
@@ -59,6 +59,45 @@
     </div>
 
     <div id="map"></div>
+
+    <div id="fs-template" class="hidden">
+        <div class="row">
+            <div class="col-sm-12 text-center">
+                <p>
+                    <strong>
+                        <span class="fs-name"></span>
+                    </strong>
+                </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4">
+                <img class="fs-photo" src="" />
+            </div>
+
+            <div class="col-sm-8">
+                <p class="fs-rating hidden">
+                    <b>Rating:</b>
+                    <span></span>
+                </p>
+                <p class="fs-price hidden">
+                    <b>Price:</b>
+                    <span></span>
+                </p>
+                <p class="fs-address hidden">
+                    <b>Address:</b>
+                    <span></span>
+                </p>
+                <p class="fs-phone hidden">
+                    <b>Phone:</b>
+                    <span></span>
+                </p>
+                <p class='fs-link'>
+                    <a href='#' target="_blank">Foursquare page</a>
+                </p>
+            </div>
+        </div>
+    </div>
 
     <script src="js/vendor/jquery-1.11.2.js"></script>
     <script src="js/vendor/bootstrap.min.js"></script>

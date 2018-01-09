@@ -5,13 +5,17 @@ html, body {
 }
 
 #map {
-    height: 100%;
+    height: 75%;
 }
 
 nav {
     margin: 5px;
 }
 
-#message {
+#error-message {
     display: none;
+}
+
+.fs-photo {
+    width: 100%;
 }
