@@ -17,8 +17,11 @@ function initMap() {
         center: verdao,
         zoom: 16
     });
+    var infowindow = new google.maps.InfoWindow({
+        maxWidth: 400
+    });
 
-    ko.applyBindings(new ViewModel(map, places));
+    ko.applyBindings(new ViewModel(map, infowindow, places));
 }
 
 // Show error message if map initialization failed
@@ -42,7 +45,7 @@ function populateInfoWindow(place, infowindow, map) {
 }
 
 // Place model
-function Place(place, map, filter, activePlace) {
+function Place(place, map, filter) {
     var self = this;
     this.title = place.title;
     this.marker = new google.maps.Marker({
@@ -106,13 +109,11 @@ function Place(place, map, filter, activePlace) {
     });
 }
 
-var ViewModel = function (map, places) {
+var ViewModel = function (map, infowindow, places) {
     var self = this;
     this.map = map;
+    this.infowindow = infowindow;
 
-    this.infowindow = new google.maps.InfoWindow({
-        maxWidth: 400
-    });
     // Clear the marker and activePlace if the infowindow is closed.
     this.infowindow.addListener('closeclick', function () {
         this.marker = null;
@@ -133,11 +134,11 @@ var ViewModel = function (map, places) {
 
     this.places().forEach(function (place) {
         place.marker.addListener('click', function () {
-            self.showInfowindow(place);
+            self.showDetails(place);
         });
     });
 
-    this.showInfowindow = function (place) {
+    this.showDetails = function (place) {
         self.activePlace(place);
         populateInfoWindow(place, self.infowindow, self.map);
     };
