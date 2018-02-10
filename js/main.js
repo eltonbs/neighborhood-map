@@ -82,6 +82,7 @@ function Place(place, map, filter) {
         if(venue.bestPhoto) {
             var url = venue.bestPhoto.prefix + 'width200' + venue.bestPhoto.suffix;
             $content.find('.fs-photo').attr('src', url); 
+            $content.find('.fs-photo').attr('alt', venue.name); 
         }
         if(venue.rating) {
             $content.find('.fs-rating span').text(venue.rating); 
